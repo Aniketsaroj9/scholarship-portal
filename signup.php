@@ -142,7 +142,7 @@ if(isset($_POST['sign-up']))
             file_put_contents('debug_log.txt', "SIGNUP: Success for user: $name\n", FILE_APPEND);
             
             echo"<h1>Sign-up Successful</h1>";
-            echo "<script>setTimeout(function(){ window.location.href='loginframe.html'; }, 2000);</script>";
+            echo "<script>setTimeout(function(){ window.location.href='login.php'; }, 2000);</script>";
         } catch (PDOException $e) {
             // Keep error generic for the UI, log specifically
             file_put_contents('debug_log.txt', "SIGNUP: Error: " . $e->getMessage() . "\n", FILE_APPEND);
