@@ -116,25 +116,38 @@
 <?php
 if(isset($_POST['sign-up']))
 {    
-    $servername='localhost';
-    $username='root';
-    $password='';
-    $dbname='login_db';
+    require_once 'database_connection.php';
     
-    $con=mysqli_connect($servername,$username,$password,$dbname);
-    $mobile=$_POST['number'];
-    $name=$_POST['username'];
-    $pass=$_POST['password']; 
+    $mobile = $_POST['number'] ?? '';
+    $name = $_POST['username'] ?? '';
+    $pass = $_POST['password'] ?? '';
    
-    $sql="INSERT INTO `login` (`mobilno`,`username`,`password`) VALUES ('$mobile', '$name', '$pass')"; 
-    $result=mysqli_query($con,$sql);
-    if($sql==true)
-    {
-        echo"<h1>Sign-up Successful</h1>";
-
-    }
-    else{
-        echo"Sign-up Failed";
+    if (empty($name) || empty($pass)) {
+        echo "<h1>Please fill in all required fields.</h1>";
+    } else {
+        // Hash the password securely
+        $hashed_pass = password_hash($pass, PASSWORD_DEFAULT);
+        
+        $sql = "INSERT INTO `login` (`mobilno`, `username`, `password`) VALUES (:mobilno, :username, :password)";
+        
+        try {
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([
+                ':mobilno' => $mobile,
+                ':username' => $name,
+                ':password' => $hashed_pass
+            ]);
+            
+            // Debug Logging safely without credentials
+            file_put_contents('debug_log.txt', "SIGNUP: Success for user: $name\n", FILE_APPEND);
+            
+            echo"<h1>Sign-up Successful</h1>";
+            echo "<script>setTimeout(function(){ window.location.href='loginframe.html'; }, 2000);</script>";
+        } catch (PDOException $e) {
+            // Keep error generic for the UI, log specifically
+            file_put_contents('debug_log.txt', "SIGNUP: Error: " . $e->getMessage() . "\n", FILE_APPEND);
+            echo "Sign-up Failed. Username or mobile number might already exist.";
+        }
     }
 }
 ?>

@@ -46,42 +46,33 @@ h1{
 </head>
 <body>
 <?php
-$servername='localhost';
-$username='root';
-$password='';
-$dbname='login_db';
+require_once 'database_connection.php';
 
-$con=mysqli_connect($servername,$username,$password,$dbname);
+    $user_unsafe = trim($_REQUEST['username'] ?? '');
+    $pass_unsafe = $_REQUEST['password'] ?? '';
 
-
-    $user_unsafe=$_REQUEST['username'];
-    $pass_unsafe=$_REQUEST['password'];
-
-    $user=mysqli_real_escape_string($con,$user_unsafe);
-    $pass=mysqli_real_escape_string($con,$pass_unsafe);
-
-    $query=mysqli_query($con,"SELECT username,password FROM login_db.login WHERE login.username='$user' AND login.password= '$pass'")or die(mysqli_error($con));
+    // Use PDO Prepared Statements
+    $sql = "SELECT username, password FROM login WHERE username = :username LIMIT 1";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([':username' => $user_unsafe]);
     
-    $counter=mysqli_num_rows($query);
+    $row = $stmt->fetch();
    
-    if($counter == 0)
+    // Check if user exists and password matches the hash
+    if($row && password_verify($pass_unsafe, $row['password']))
     {
-        echo "<h1>Username  Or Password Are Incorrect !!!</h1>";echo"<br>";
-        echo"<div style='float:right'><button  class='button button1' onclick= location.href='login.php'>login</button></div>";
-        echo"<div style='float:left'><button class='button button4' onclick= location.href='signup.php'>Go to sign-up</button></div>";
-    }
-    else{
-     
-    $row=mysqli_fetch_assoc($query);
-    $name=$row['username'];
-    $id=$row['password'];
         session_start();
-        $_SESSION["id"] = $id;
-        $_SESSION["username"] =$name;   
+        $_SESSION["id"] = $row['password']; // Note: Storing password hash in session id key to match legacy structure, though generally ids are used.
+        $_SESSION["username"] = $row['username'];   
         
         header("location:home.php");
+        exit();
     }
-   
+    else{
+        echo "<h1>Username  Or Password Are Incorrect !!!</h1>";echo"<br>";
+        echo"<div style='float:right'><button  class='button button1' onclick=\"location.href='login.php'\">login</button></div>";
+        echo"<div style='float:left'><button class='button button4' onclick=\"location.href='signup.php'\">Go to sign-up</button></div>";
+    }
 ?>
 </body>
 </html>

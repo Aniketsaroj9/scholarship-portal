@@ -1,10 +1,5 @@
 <?php
- $servername='localhost';
- $username='root';
- $password='';
- $dbname='login_db';
- 
- $con=mysqli_connect($servername,$username,$password,$dbname);
+require_once 'database_connection.php';
 
   $firstname=$_POST['name'];
   $middname=$_POST['mid'];
@@ -22,18 +17,27 @@
   $sql="INSERT INTO `reg` (`firstname`, `middelname`, `lastname`, `email`, `mobilno`, `country`, `cast`,
    `qualification`, `current`, `state`, `schol`) VALUES ('$firstname', '$middname', ' $lastname', '$email', '$mobilno','$country',
    '$cast','$qualification','$current','$state','$schol')"; 
+  
+   // Debug Logging
+   file_put_contents('debug_log.txt', "REGIS_PROCC: Received POST: " . print_r($_POST, true) . "\nSQL: $sql\n", FILE_APPEND);
+
   $result=mysqli_query($con,$sql);
-  if($sql==true)
+  
+  if ($result) {
+      file_put_contents('debug_log.txt', "REGIS_PROCC: Success\n", FILE_APPEND);
+  } else {
+      file_put_contents('debug_log.txt', "REGIS_PROCC: Error: " . mysqli_error($con) . "\n", FILE_APPEND);
+  }
+  if($result)
   {
      
       echo"<script type='text/javascript'>
       alert('REGISTER SUCCESHULLY');
+      window.location.href='home.php';
       </script>";
-      header("location:home.php");
   }
   else{
-      echo"REGISTER Failed";
-      header("location:home.php");
+      echo "REGISTER Failed: " . mysqli_error($con);
   }
 
 
