@@ -87,3 +87,4 @@ SQL: INSERT INTO `reg` (`firstname`, `middelname`, `lastname`, `email`, `mobilno
    '','','','maharashtra','Tribual Development Department')
 REGIS_PROCC: Success
 SIGNUP: Success for user: test_phase2_user
+REGIS_PROCC: Success for user email: test@example.com
