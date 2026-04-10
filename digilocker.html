@@ -3,68 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dg-locker</title>
+    <title>DigiLocker | Scholarship Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-    .button {
-  border: none;
-  color: white;
-  padding: 16px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin: 4px 2px;
-  transition-duration: 0.4s;
-  cursor: pointer;
-}
+        :root {
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --bg-color: #0f172a;
+            --glass-bg: rgba(30, 41, 59, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
 
-.button1 {
-  background-color: white; 
-  color: black; 
-  border: 2px solid #4CAF50;
-}
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-.button1:hover {
-  background-color: #4CAF50;
-  color: white;
-}
+        body {
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-color);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(236, 72, 153, 0.15) 0px, transparent 50%);
+            background-attachment: fixed;
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
 
-.button2 {
-  background-color: white; 
-  color: black; 
-  border: 2px solid #008CBA;
-}
+        .container {
+            width: 100%;
+            max-width: 480px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 3rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.6s ease-out forwards;
+            text-align: center;
+        }
 
-.button2:hover {
-  background-color: #008CBA;
-  color: white;
-}
-.button3 {
-  background-color: white; 
-  color: black; 
-  border: 2px solid red;
-}
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-.button3:hover {
-  background-color:yellow;
-  color: rgb(3, 18, 72);
-}
+        .logo-wrap {
+            margin-bottom: 2rem;
+        }
 
+        .logo-wrap img {
+            width: 180px;
+            border-radius: 12px;
+            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.3));
+        }
+
+        h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 2.5rem;
+            line-height: 1.6;
+        }
+
+        .actions {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 1rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            border: none;
+            font-family: inherit;
+            width: 100%;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);
+        }
+        .btn-primary:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.6);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-main);
+            border: 1px solid var(--glass-border);
+        }
+        .btn-ghost:hover { background: rgba(255,255,255,0.1); transform: translateY(-2px); }
+
+        .btn-green {
+            background: rgba(34, 197, 94, 0.15);
+            color: #22c55e;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+        .btn-green:hover {
+            background: rgba(34, 197, 94, 0.25);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 500px) {
+            .container { padding: 2rem 1.5rem; }
+        }
     </style>
 </head>
 <body>
-    
-            <img src="https://www.amsinform.com/wp-content/uploads/2022/04/digilocker-partner-logo.png" width="200" >
-            <br>
-            <br>
-            <button  class="button button1" onclick="location.href='signup.php'">New Application Registration</button>
-            <br>
-            <br>
-            <button  class="button button2" onclick="location.href='login.php'">  Application Login</button>
-            <br>
-            <br>
-            <button  class="button button3" onclick="location.href='scheme.html'"> All Eligible Schemes</button>
 
-    
+<div class="container">
+    <div class="logo-wrap">
+        <img src="https://www.amsinform.com/wp-content/uploads/2022/04/digilocker-partner-logo.png" alt="DigiLocker Logo">
+    </div>
+
+    <h1>DigiLocker Integration</h1>
+    <p class="subtitle">Link your DigiLocker account to instantly fetch official documents like marksheets and caste certificates.</p>
+
+    <div class="actions">
+        <a href="signup.php" class="btn btn-primary">New Application Registration</a>
+        <a href="login.php" class="btn btn-ghost">Application Login</a>
+        <a href="scheme.html" class="btn btn-green">View Eligible Schemes</a>
+    </div>
+</div>
+
 </body>
 </html>

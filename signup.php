@@ -1,121 +1,8 @@
 <?php
-?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Signup</title>
-    <style>
-    body{
-         
-        background-image: url("bgimg.jpg");
-        background-repeat: repeat;
-        
-    }
-    .box
-    {   display :flex;
-        justify-content:center;
-        left:200px;
-        top:10px;
-        padding-top: 200px;
-        margin=0 ;
-       padding=0 ;
-       box-sizing:border-box;
-       font-family:'Poppins',sans-serif;
-      position:relative;
-      width:380px;
-      height : 420px;
-      background:blue;
-      border-radius:8px;
-    }
-    .box form
-    {
-        position:absolute;
-        inset:4px;
-        background:blanchedalmond;
-        padding:20px 40px;
-        border-radius:8px ;
-        z-index:2;
-        display:flex;
-        flex-direction:column ;
-    }
-    .box form h1{
-        color:black;
-        font-weight: 500;
-        text-align:center;
-        letter-spacing:0.1em;
-    }
-    .box form.inputbox{
-        position:relative;
-        width:300px;
-        margin-top:35px;
-    }
-    .box form.inputbox input{
-        position :relative;
-        width:100%;
-        padding :20px 10px 10px;
-        background:transparent;
-        outline:none;
-        border:none;
-        box-shadow:none;
-        color: #23242a;
-        font-size:1em;
-        letter-spacing:0.05em;
-        transition:0.5 ;
-        z-index:10;
-    }
-    input{
-        height:60px ;
-        text-align: center;
-        font-size:1em;
-    }
-    .button {
-  border: none;
-  color: white;
-  padding: 16px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin: 4px 2px;
-  transition-duration: 0.4s;
-  cursor: pointer;
-}
-.button4{
-  background-color: orange; 
-  color: rgb(3, 18, 72);
-  border: 2px solid rgb(14, 12, 12);
-  
-}
-.button4:hover {
-  background-color:blueviolet;
-  color:whitesmoke;
-}
-   </style>
-</head>
-<body>
-<div class="login">
-<div class="box"> 
-<div class="inputbox">
+$message = '';
+$messageType = ''; // 'success' or 'error'
 
-    <form action="" method="POST">
-    <h1>Sign-up</h1>
-     <input type="number"  id="no" name="number" placeholder="Mobile NO." /> <br> 
-     <br>
-    <input type="text" id="user" name="username" placeholder="username"/><br>
-<br>
-<input type="text" id="pass" name="password" placeholder="password"/><br>
-<br>
-<button  type="submit"class="button button4" name="sign-up" default>sign-up</button>
-<br>
-<br>
-
-</form>
-
-<?php
-if(isset($_POST['sign-up']))
-{    
+if(isset($_POST['sign-up'])) {    
     require_once 'database_connection.php';
     
     $mobile = $_POST['number'] ?? '';
@@ -123,7 +10,8 @@ if(isset($_POST['sign-up']))
     $pass = $_POST['password'] ?? '';
    
     if (empty($name) || empty($pass)) {
-        echo "<h1>Please fill in all required fields.</h1>";
+        $message = "Please fill in all required fields.";
+        $messageType = "error";
     } else {
         // Hash the password securely
         $hashed_pass = password_hash($pass, PASSWORD_DEFAULT);
@@ -138,23 +26,261 @@ if(isset($_POST['sign-up']))
                 ':password' => $hashed_pass
             ]);
             
-            // Debug Logging safely without credentials
             file_put_contents('debug_log.txt', "SIGNUP: Success for user: $name\n", FILE_APPEND);
             
-            echo"<h1>Sign-up Successful</h1>";
+            $message = "Account created successfully! Redirecting to login...";
+            $messageType = "success";
             echo "<script>setTimeout(function(){ window.location.href='login.php'; }, 2000);</script>";
         } catch (PDOException $e) {
-            // Keep error generic for the UI, log specifically
             file_put_contents('debug_log.txt', "SIGNUP: Error: " . $e->getMessage() . "\n", FILE_APPEND);
-            echo "Sign-up Failed. Username or mobile number might already exist.";
+            $message = "Sign-up failed. Username or mobile number might already exist.";
+            $messageType = "error";
         }
     }
 }
 ?>
-</div >
-</div > 
-<br>
-<br><br><br>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up | Scholarship Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --bg-color: #0f172a;
+            --glass-bg: rgba(30, 41, 59, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --input-bg: rgba(15, 23, 42, 0.6);
+            --success: #10b981;
+            --error: #ef4444;
+        }
+
+        body {
+            margin: 0;
+            padding: 2rem;
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-color);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(236, 72, 153, 0.15) 0px, transparent 50%);
+            background-attachment: fixed;
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 450px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 3rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .header h1 {
+            margin: 0 0 0.5rem 0;
+            font-size: 2.25rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header p {
+            margin: 0;
+            color: var(--text-muted);
+            font-size: 1.05rem;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+            text-align: center;
+            font-size: 0.95rem;
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+
+        .alert-success {
+            background-color: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .alert-error {
+            background-color: rgba(239, 68, 68, 0.15);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1.25rem;
+        }
+
+        label {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="password"] {
+            width: 100%;
+            background: var(--input-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 1rem;
+            color: var(--text-main);
+            font-family: inherit;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+        
+        /* Remove arrows from number input */
+        input[type="number"]::-webkit-inner-spin-button, 
+        input[type="number"]::-webkit-outer-spin-button { 
+            -webkit-appearance: none; 
+            margin: 0; 
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+            background: rgba(15, 23, 42, 0.8);
+        }
+
+        .actions {
+            margin-top: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 1rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            border: none;
+            font-family: inherit;
+            width: 100%;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.6);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-main);
+            border: 1px solid var(--glass-border);
+        }
+
+        .btn-ghost:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 1.5rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: var(--primary);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>Create Account</h1>
+        <p>Register for access to scholarships</p>
+    </div>
+
+    <?php if ($message): ?>
+        <div class="alert alert-<?php echo $messageType; ?>">
+            <?php echo htmlspecialchars($message); ?>
+        </div>
+    <?php endif; ?>
+
+    <form action="" method="POST">
+        <div class="form-group">
+            <label for="number">Mobile Number</label>
+            <input type="number" id="number" name="number" placeholder="Enter 10 digit number" required />
+        </div>
+
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" placeholder="Choose a username" required />
+        </div>
+        
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Create a secure password" required />
+        </div>
+
+        <div class="actions">
+            <button type="submit" class="btn btn-primary" name="sign-up">Sign Up</button>
+            <button type="button" class="btn btn-ghost" onclick="location.href='login.php'">Already have an account?</button>
+        </div>
+    </form>
+
+    <a href="index.php" class="back-link">Return to Home</a>
 </div>
+
 </body>
 </html>
